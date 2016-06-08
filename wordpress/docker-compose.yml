@@ -1,0 +1,23 @@
+wordpress:
+  image: wordpress
+  ports:
+    - 8443:80
+  environment:
+    - WORDPRESS_DB_HOST=mysql
+    - WORDPRESS_DB_USER=root
+    - WORDPRESS_DB_PASSWORD=changeme
+    - WORDPRESS_DB_NAME=wordpress
+    - WORDPRESS_TABLE_PREFIX=wp_
+  links:
+    - mysql:mysql
+  log_driver: 'fluentd'
+  log_opt:
+    fluentd-address: 10.44.59.42:24224
+    fluentd-tag: docker.{{.FullID}}
+
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=changeme
+  volumes:
+    - /root/wp_mysql_data:/var/lib/mysql
